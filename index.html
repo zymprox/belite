@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A special birthday surprise for someone who makes ordinary days extraordinary." />
+  <meta name="theme-color" content="#0A0611" />
+  <title>Happy Birthday Prachi!</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+<body class="locked">
+
+  <!-- ═══ Scroll Progress Bar ═══ -->
+  <div class="scroll-progress" id="scrollProgress" style="width: 0%"></div>
+
+  <!-- ═══ Music Toggle ═══ -->
+  <button class="music-toggle" id="musicToggle" aria-label="Toggle music">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+  </button>
+
+  <!-- ═══ Easter Egg Popup ═══ -->
+  <div class="easter-egg-popup" id="easterEggPopup"></div>
+
+  <!-- ═══ Confetti Container ═══ -->
+  <div class="confetti-container" id="confettiContainer"></div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 0: GATE — Password + Countdown
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="gate-screen">
+    <!-- Floating particles background -->
+    <div class="gate__particles" id="gateParticles"></div>
+
+    <div class="gate__content">
+      <!-- Lock icon SVG -->
+      <div class="gate__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-rose)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          <circle cx="12" cy="16" r="1" fill="var(--accent-rose)"/>
+        </svg>
+      </div>
+
+      <h1 class="gate__title">Something Special Awaits</h1>
+      <p class="gate__subtitle">This page is locked. Only the birthday girl knows the code.</p>
+
+      <!-- Countdown Timer -->
+      <div class="countdown" id="countdown">
+        <div class="countdown__unit">
+          <span class="countdown__number" id="countDays">00</span>
+          <span class="countdown__label">Days</span>
+        </div>
+        <div class="countdown__unit">
+          <span class="countdown__number" id="countHours">00</span>
+          <span class="countdown__label">Hours</span>
+        </div>
+        <div class="countdown__unit">
+          <span class="countdown__number" id="countMins">00</span>
+          <span class="countdown__label">Mins</span>
+        </div>
+        <div class="countdown__unit">
+          <span class="countdown__number" id="countSecs">00</span>
+          <span class="countdown__label">Secs</span>
+        </div>
+      </div>
+
+      <!-- Birthday Today Banner -->
+      <div class="gate__birthday-today" id="birthdayToday" style="display:none">
+        It's TODAY! Happy Birthday!
+      </div>
+
+      <!-- Password Input -->
+      <div class="password-box">
+        <p class="password-box__label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+          </svg>
+          Enter the 4-digit code
+        </p>
+
+        <div class="pin-input" id="pinInput">
+          <input type="tel" class="pin-input__digit" maxlength="1" data-index="0" autocomplete="off" inputmode="numeric" />
+          <input type="tel" class="pin-input__digit" maxlength="1" data-index="1" autocomplete="off" inputmode="numeric" />
+          <input type="tel" class="pin-input__digit" maxlength="1" data-index="2" autocomplete="off" inputmode="numeric" />
+          <input type="tel" class="pin-input__digit" maxlength="1" data-index="3" autocomplete="off" inputmode="numeric" />
+        </div>
+
+        <button class="gate__enter-btn" id="gateEnterBtn">Unlock the Surprise</button>
+
+        <p class="gate__error hidden" id="gateError"></p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 1: LOADING — System Scan + Warning
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="loading-screen" class="hidden">
+    <div class="terminal__content">
+      <div class="terminal__line" data-delay="0">
+        <span class="terminal__line--check">> Initializing Birthday Protocol v2.0...</span>
+      </div>
+      <div class="terminal__line" data-delay="600">
+        <span class="terminal__line--check">> Detecting Birthday Girl... <strong style="color: var(--accent-emerald)">FOUND</strong></span>
+      </div>
+      <div class="terminal__line" data-delay="1200">
+        <span class="terminal__line--check">> Scanning Baklol Level... <strong style="color: var(--accent-coral)">9999% — OVERFLOW</strong></span>
+      </div>
+      <div class="terminal__line" data-delay="1800">
+        <span class="terminal__line--check">> Loading Happiness Module... <strong style="color: var(--accent-emerald)">100%</strong></span>
+      </div>
+      <div class="terminal__line" data-delay="2400">
+        <span class="terminal__line--check">> Checking Punctuality... <strong style="color: var(--text-warning)">ERROR: Always Late</strong></span>
+      </div>
+      <div class="terminal__line" data-delay="3000">
+        <span class="terminal__line--check">> Loading College Memories... <strong style="color: var(--accent-emerald)">3 years loaded</strong></span>
+      </div>
+      <div class="terminal__line" data-delay="3600">
+        <span class="terminal__line--check">> Friendship.exe... <strong style="color: var(--accent-emerald)">Running forever</strong></span>
+      </div>
+      <div class="terminal__line" data-delay="4200">
+        <span class="terminal__line--error">> WARNING: Excessive birthday wishes detected.</span>
+      </div>
+
+      <!-- Warning Box -->
+      <div class="terminal__warning" id="terminalWarning">
+        <div class="terminal__warning-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          WARNING
+        </div>
+        <p class="terminal__warning-text">
+          This website contains excessive birthday wishes, terrible jokes, real college memories, and one certified baklol. Side effects may include uncontrollable smiling and sudden nostalgia.
+        </p>
+      </div>
+
+      <!-- Enter Button -->
+      <button class="terminal__enter-btn" id="loadingEnterBtn">Continue at your own risk</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 2: WELCOME / HERO
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="welcome-screen" class="section">
+    <!-- Floating elements -->
+    <div class="floating-elements" id="floatingElements"></div>
+
+    <!-- Photo -->
+    <div class="welcome__photo-wrapper" id="prachiPhoto">
+      <div class="welcome__photo-glow"></div>
+      <img
+        src="assets/photos/prachi-profile.png"
+        alt="Prachi"
+        class="welcome__photo"
+        loading="eager"
+      />
+      <span class="welcome__badge">Birthday Girl</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="welcome__title">
+      <span class="welcome__title-line1">Happy Birthday</span>
+      <span class="welcome__title-line2">Prachi!</span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="welcome__subtitle">
+      Today, the world celebrates the official arrival of one amazing human...
+      and one <em>complete baklol</em>.
+    </p>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 3: BAKLOL METER
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="baklol-meter" class="section">
+    <h2 class="meter__title">Official Baklol Report Card</h2>
+
+    <div class="meter__container" id="meterContainer">
+      <!-- Serious -->
+      <div class="meter__item" data-target="2" data-type="low">
+        <div class="meter__label">
+          <span>Serious Level</span>
+          <span class="meter__value">2%</span>
+        </div>
+        <div class="meter__bar-bg">
+          <div class="meter__bar-fill meter__bar-fill--low"></div>
+        </div>
+      </div>
+
+      <!-- Intelligent -->
+      <div class="meter__item" data-target="80" data-type="high">
+        <div class="meter__label">
+          <span>Intelligence</span>
+          <span class="meter__value">80%</span>
+        </div>
+        <div class="meter__bar-bg">
+          <div class="meter__bar-fill meter__bar-fill--high"></div>
+        </div>
+      </div>
+
+      <!-- Caring -->
+      <div class="meter__item" data-target="95" data-type="high">
+        <div class="meter__label">
+          <span>Caring for Friends</span>
+          <span class="meter__value">95%</span>
+        </div>
+        <div class="meter__bar-bg">
+          <div class="meter__bar-fill meter__bar-fill--high"></div>
+        </div>
+      </div>
+
+      <!-- Baklol Energy (overflow!) -->
+      <div class="meter__item" data-target="100" data-type="overflow" id="baklolMeter" style="cursor: pointer;">
+        <div class="meter__label">
+          <span>Baklol Energy</span>
+          <span class="meter__value" style="color: var(--accent-coral)">9999%</span>
+        </div>
+        <div class="meter__bar-bg">
+          <div class="meter__bar-fill meter__bar-fill--overflow"></div>
+        </div>
+        <div class="meter__overflow-text">ERROR: Value exceeds maximum. System overloaded.</div>
+      </div>
+
+      <!-- Drama Potential -->
+      <div class="meter__item" data-target="88" data-type="high">
+        <div class="meter__label">
+          <span>Drama Potential</span>
+          <span class="meter__value">88%</span>
+        </div>
+        <div class="meter__bar-bg">
+          <div class="meter__bar-fill meter__bar-fill--high"></div>
+        </div>
+      </div>
+
+      <!-- Smile Power (infinite) -->
+      <div class="meter__item" data-target="100" data-type="infinite">
+        <div class="meter__label">
+          <span>Smile Power</span>
+          <span class="meter__value" style="color: var(--accent-gold)">Unlimited</span>
+        </div>
+        <div class="meter__bar-bg">
+          <div class="meter__bar-fill meter__bar-fill--infinite"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="meter__click-hint" id="meterHint">Psst... try clicking the Baklol meter</p>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 4: COLLEGE MEMORIES TIMELINE
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="memories-timeline" class="section section--auto">
+    <h2 class="timeline__title">
+      Chapters We <span>Lived Together</span>
+    </h2>
+
+    <div class="timeline">
+      <!-- Card 1: Ayodhya Trip -->
+      <div class="timeline__card">
+        <img src="assets/photos/ayodhya.png" alt="Ayodhya trip" class="timeline__card-img" loading="lazy" />
+        <div class="timeline__card-body">
+          <div class="timeline__card-tag">Ayodhya Trip</div>
+          <p class="timeline__card-caption">
+            The trip where between all the noise and bus conversations, some words were said that stayed forever. Boundaries ki baat, travelling ke beech.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 2: Text-only -->
+      <div class="timeline__card timeline__card--text">
+        <div class="timeline__card-body">
+          "Assignment submitted... somehow. Gathbandhan ki sarkar at its finest."
+        </div>
+      </div>
+
+      <!-- Card 3: Scribble Day -->
+      <div class="timeline__card">
+        <img src="assets/photos/scribble-day.png" alt="Scribble Day" class="timeline__card-img" loading="lazy" />
+        <div class="timeline__card-body">
+          <div class="timeline__card-tag">Scribble Day</div>
+          <p class="timeline__card-caption">
+            Shirts pe likha, dil pe bhi. The day when everyone's handwriting became a permanent memory.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 4: Funny Selfie -->
+      <div class="timeline__card">
+        <img src="assets/photos/funny-selfie.png" alt="Funny Selfie" class="timeline__card-img" loading="lazy" />
+        <div class="timeline__card-body">
+          <div class="timeline__card-tag">Lucknow — The Selfie</div>
+          <p class="timeline__card-caption">
+            No filter, no pose, just us. The kind of photo that makes you laugh every time you find it randomly in your gallery.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 5: Text-only -->
+      <div class="timeline__card timeline__card--text">
+        <div class="timeline__card-body">
+          "Another day survived in CMP college. Faltugiri level: Expert."
+        </div>
+      </div>
+
+      <!-- Card 6: HCL Interview -->
+      <div class="timeline__card">
+        <img src="assets/photos/hcl-interview.png" alt="HCL Interview return" class="timeline__card-img" loading="lazy" />
+        <div class="timeline__card-body">
+          <div class="timeline__card-tag">HCL Interview Return</div>
+          <p class="timeline__card-caption">
+            Test dekar wapis laut rahe the. Pura yakin tha ki mail nahi ayegi. But we went together, and that's what mattered.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 7: Farewell -->
+      <div class="timeline__card">
+        <img src="assets/photos/farewell.png" alt="Farewell Day" class="timeline__card-img" loading="lazy" />
+        <div class="timeline__card-body">
+          <div class="timeline__card-tag">Farewell</div>
+          <p class="timeline__card-caption">
+            The last official photo. Complete but incomplete — because jitni reels banani thi wo bachi reh gayi.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 8: Text-only -->
+      <div class="timeline__card timeline__card--text">
+        <div class="timeline__card-body">
+          "Mission: Graduate — Completed. (Lab 1, 2nd row, gate side — forever our seat.)"
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 5: FRIENDSHIP PAGE
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="friendship-page" class="section">
+    <div class="friendship__container">
+      <p class="friendship__line friendship__line--dim">We met during BCA at CMP Degree College.</p>
+      <p class="friendship__line">Semesters passed. Exams happened. Events were planned.</p>
+      <p class="friendship__line">Between all the chaos, confusion, and random conversations...</p>
+      <p class="friendship__line friendship__line--highlight">something real was being built.</p>
+      <p class="friendship__line">Not the kind of friendship you announce.</p>
+      <p class="friendship__line">The kind that just... exists.</p>
+      <p class="friendship__line friendship__line--accent">In the planning discussions. In the small check-ins.</p>
+      <p class="friendship__line friendship__line--accent">In the practical suggestions. In the comfortable chaos.</p>
+      <p class="friendship__line">College ended.</p>
+      <p class="friendship__line friendship__line--highlight">But good memories don't need a classroom to exist.</p>
+      <p class="friendship__line friendship__line--dim" style="margin-top: var(--space-xl);">
+        Some people become memories because of one extraordinary moment.<br/>
+        Some become memories because they quietly stay present throughout the journey.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 6: ROAST SECTION
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="roast-section" class="section">
+    <h2 class="roast__title">Certified Roast Zone</h2>
+    <p class="roast__subtitle">Tap each card. No feelings were harmed in the making of this section. (Probably.)</p>
+
+    <div class="roast__grid" id="roastGrid">
+      <!-- Card 1 -->
+      <div class="roast__card" data-roast="Certified Professional Overthinker. Sochti itna hai, NASA hire kar le.">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #1
+          </div>
+          <div class="roast__card-back">Certified Professional Overthinker. Sochti itna hai, NASA hire kar le.</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="roast__card" data-roast="Sometimes intelligent, sometimes... buffering. Brain ka WiFi intermittent hai.">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #2
+          </div>
+          <div class="roast__card-back">Sometimes intelligent, sometimes... buffering. Brain ka WiFi intermittent hai.</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="roast__card" data-roast="WARNING: Can laugh at absolutely anything. Hazardous to silent libraries.">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #3
+          </div>
+          <div class="roast__card-back">WARNING: Can laugh at absolutely anything. Hazardous to silent libraries.</div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="roast__card" data-roast="Friend who deserves appreciation? 'Myself.' — Actual quote. Confidence 📈📈">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #4
+          </div>
+          <div class="roast__card-back">Friend who deserves appreciation? "Myself." — Actual quote. Confidence level: off the charts.</div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="roast__card" data-roast="Practical kam, gathbandhan ki sarkar zyada. Politician material confirmed.">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #5
+          </div>
+          <div class="roast__card-back">Practical kam, gathbandhan ki sarkar zyada. Politician material confirmed.</div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="roast__card" data-roast="Communication me full marks. Real-life replies? 'Seen 3 hours ago.' 💀">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #6
+          </div>
+          <div class="roast__card-back">Communication me full marks. Real-life replies? "Seen 3 hours ago." The irony is real.</div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="roast__card" data-roast="Attended classes for 'faltugiri' and calls it 'what I'll miss most.' Legend.">
+        <div class="roast__card-inner">
+          <div class="roast__card-front">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Tap to reveal roast #7
+          </div>
+          <div class="roast__card-back">Attended classes for "faltugiri" and calls it "what I'll miss most." Legend.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 7: WISHES WALL
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="wishes-wall" class="section section--auto">
+    <h2 class="wishes__title">
+      Birthday <span>Wishes</span>
+    </h2>
+
+    <div class="wishes__grid" id="wishesGrid">
+      <!-- Wish 1 -->
+      <div class="wish__card">
+        <div class="wish__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/>
+          </svg>
+        </div>
+        <p class="wish__card-text">May your dreams come true — the apartment in a new city, decorated your way, with that car.</p>
+        <p class="wish__card-note">You described it so clearly. It's already yours in some universe.</p>
+      </div>
+
+      <!-- Wish 2 -->
+      <div class="wish__card">
+        <div class="wish__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+        </div>
+        <p class="wish__card-text">May you always have reasons to laugh — the kind of laughter that echoes through empty hallways.</p>
+        <p class="wish__card-note">The world needs more people who laugh at absolutely anything.</p>
+      </div>
+
+      <!-- Wish 3 -->
+      <div class="wish__card">
+        <div class="wish__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <p class="wish__card-text">May success find you wherever you go. Gaurav sir was right — "Wo kar legi."</p>
+        <p class="wish__card-note">When a teacher trusts you more than you trust yourself, that says everything.</p>
+      </div>
+
+      <!-- Wish 4 -->
+      <div class="wish__card">
+        <div class="wish__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </div>
+        <p class="wish__card-text">Stay exactly as wonderfully weird as you are. The world has enough "normal" people.</p>
+        <p class="wish__card-note">Weird is just another word for unforgettable.</p>
+      </div>
+
+      <!-- Wish 5 -->
+      <div class="wish__card">
+        <div class="wish__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </div>
+        <p class="wish__card-text">"Be patient. Never lose hope. You are the strongest and main character of your life."</p>
+        <p class="wish__card-note">Your own words, Prachi. Never forget them.</p>
+      </div>
+
+      <!-- Wish 6 -->
+      <div class="wish__card">
+        <div class="wish__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+        </div>
+        <p class="wish__card-text">May every decision you take, every boundary you set — lead you exactly where you need to be.</p>
+        <p class="wish__card-note">Take your decisions. Set your boundaries. That's your superpower.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 8: BIRTHDAY CELEBRATION
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="celebration" class="section">
+    <div class="balloons" id="balloonsContainer"></div>
+
+    <div class="celebration__content">
+      <h2 class="celebration__title">Time to Celebrate!</h2>
+
+      <!-- Cake -->
+      <div class="cake" id="birthdayCake">
+        <div class="cake__top-frosting"></div>
+        <div class="cake__top"></div>
+        <div class="cake__frosting"></div>
+        <div class="cake__base"></div>
+        <div class="candles" id="candles">
+          <div class="candle"><div class="candle__flame"></div></div>
+          <div class="candle"><div class="candle__flame"></div></div>
+          <div class="candle"><div class="candle__flame"></div></div>
+          <div class="candle"><div class="candle__flame"></div></div>
+          <div class="candle"><div class="candle__flame"></div></div>
+        </div>
+      </div>
+
+      <p class="celebration__instruction" id="cakeInstruction">Tap the cake to blow the candles!</p>
+      <p class="celebration__wish-text" id="wishText">Make a wish...</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 9: FINAL MESSAGE
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="final-message" class="section section--auto">
+    <div class="final__container">
+      <p class="final__line">Thank you for being a part of my college journey.</p>
+      <p class="final__line">For the ordinary moments that became extraordinary.</p>
+      <p class="final__line final__line--accent">For the Ayodhya conversations, the event planning chaos,</p>
+      <p class="final__line final__line--accent">the practical exam gathbandhan, and all those small check-ins.</p>
+      <p class="final__line" style="margin-top: var(--space-2xl)">Wishing you happiness, success, good health,</p>
+      <p class="final__line">and countless reasons to smile.</p>
+      <p class="final__line final__line--gold" style="margin-top: var(--space-xl)">Stay happy.</p>
+      <p class="final__line">And yes...</p>
+      <p class="final__line final__line--accent">Never stop being the baklol that makes people laugh.</p>
+
+      <p class="final__line final__line--big">Happy Birthday, Prachi!</p>
+
+      <div class="final__signature" id="finalSignature">
+        — Abhishek
+      </div>
+
+      <div class="final__footer">
+        Made with code, coffee, and college memories
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Scripts -->
+  <script src="js/animations.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
